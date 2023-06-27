@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "HeelsPlugin/1.2.5": {
+        "runtime": {
+          "HeelsPlugin.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "HeelsPlugin/1.2.5": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
