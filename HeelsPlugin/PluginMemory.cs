@@ -103,6 +103,7 @@ namespace HeelsPlugin
 
     private bool IsConfigValidForActor(IntPtr player, ConfigModel? config)
     {
+      if (config is { SelfOnly: true } && player != PlayerSelf.Address) return false;
       // create game object from pointer
       var gameObject = Plugin.ObjectTable.CreateObjectReference(player);
       var character = CharacterFactory.Convert(gameObject);
@@ -111,7 +112,7 @@ namespace HeelsPlugin
         return false;
 
       // get the race and sex of character for filtering on config
-      var race = (Races)Math.Pow(character.Customize[(int)CustomizeIndex.Race], 2);
+      var race = (Races)(1 << character.Customize[(int)CustomizeIndex.Race] - 1);
       var sex = (Sexes)character.Customize[(int)CustomizeIndex.Gender] + 1;
 
       var containsRace = (config?.RaceFilter & race) == race;
@@ -146,6 +147,7 @@ namespace HeelsPlugin
         {
           var playerObject = Plugin.ObjectTable.CreateObjectReference(player);
 
+          if (playerObject.ObjectIndex >= 200) return;
           // check against dictionary created from IPC
           if (playerObject != null && PlayerOffsets.ContainsKey(playerObject))
           {
@@ -189,7 +191,7 @@ namespace HeelsPlugin
     {
       try
       {
-        var modelPtr = Marshal.ReadInt64(actor, 0xF0);
+        var modelPtr = Marshal.ReadInt64(actor, 0x100);
         if (modelPtr == 0)
           return (IntPtr.Zero, Vector3.Zero);
         var positionPtr = new IntPtr(modelPtr + 0x50);
